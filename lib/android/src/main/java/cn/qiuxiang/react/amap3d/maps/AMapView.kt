@@ -116,10 +116,12 @@ class AMapView(context: Context) : TextureMapView(context) {
             data.putDouble("tilt", it.tilt.toDouble())
             data.putDouble("rotation", it.bearing.toDouble())
             if (event == "onStatusChangeComplete") {
+                var scalePerPixel: Double = map.getScalePerPixel().toDouble();
                 val southwest = map.projection.visibleRegion.latLngBounds.southwest
                 val northeast = map.projection.visibleRegion.latLngBounds.northeast
                 data.putDouble("latitudeDelta", Math.abs(southwest.latitude - northeast.latitude))
                 data.putDouble("longitudeDelta", Math.abs(southwest.longitude - northeast.longitude))
+                data.putDouble("scalePerPixel", scalePerPixel)
             }
             emit(id, event, data)
         }
