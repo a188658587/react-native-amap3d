@@ -29,7 +29,7 @@ react-native 高德地图组件，使用最新 3D SDK，支持 Android + iOS，�
 <img src="https://user-images.githubusercontent.com/1709072/40894475-907865ea-67dc-11e8-83f3-09ac73c95434.jpg" width="215"> <img src="https://user-images.githubusercontent.com/1709072/40894476-90ac38d4-67dc-11e8-9667-a4c36ef897bc.jpg" width="215"> <img src="https://user-images.githubusercontent.com/1709072/40894477-90dd258e-67dc-11e8-8809-e8f4e3198cee.jpg" width="215"> <img src="https://user-images.githubusercontent.com/1709072/40894478-91a87720-67dc-11e8-9135-c64680ad70eb.jpg" width="215">
 
 
-## 安装
+## 安装修改
 
 ### 安装依赖
 ```
