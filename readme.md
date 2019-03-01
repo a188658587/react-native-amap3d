@@ -8,7 +8,7 @@ react-native 高德地图组件，使用最新 3D SDK，支持 Android + iOS，�
 - [react-native-baidumap-sdk（百度地图 SDK）](https://github.com/qiuxiang/react-native-baidumap-sdk)
 - [react-native-amap-geolocation（高德地图定位模块）](https://github.com/qiuxiang/react-native-amap-geolocation)
 
-## 功能777
+## 功能
 
 - 地图模式切换（常规、卫星、导航、夜间）
 - 3D 建筑、路况、室内地图
@@ -36,7 +36,7 @@ react-native 高德地图组件，使用最新 3D SDK，支持 Android + iOS，�
 npm i react-native-amap3d
 ```
 
-### 项目配置111111
+### 项目配置
 #### Android
 ```
 react-native link react-native-amap3d
