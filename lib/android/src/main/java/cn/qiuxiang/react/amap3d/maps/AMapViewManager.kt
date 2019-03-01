@@ -4,7 +4,6 @@ import android.view.View
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.model.LatLng
-import com.amap.api.maps.model.MyLocationStyle
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
@@ -16,6 +15,8 @@ import com.facebook.react.uimanager.annotations.ReactProp
 internal class AMapViewManager : ViewGroupManager<AMapView>() {
     companion object {
         val ANIMATE_TO = 1
+        val SET_FIT_VIEW = 2
+        val GET_MAPSCREEN_SHOT = 3
     }
 
     override fun getName(): String {
@@ -32,12 +33,14 @@ internal class AMapViewManager : ViewGroupManager<AMapView>() {
     }
 
     override fun getCommandsMap(): Map<String, Int> {
-        return mapOf("animateTo" to ANIMATE_TO)
+        return mapOf("animateTo" to ANIMATE_TO, "setFitView" to SET_FIT_VIEW, "getMapScreenShot" to GET_MAPSCREEN_SHOT)
     }
 
     override fun receiveCommand(overlay: AMapView, commandId: Int, args: ReadableArray?) {
         when (commandId) {
             ANIMATE_TO -> overlay.animateTo(args)
+            SET_FIT_VIEW -> overlay.setFitView(args)
+            GET_MAPSCREEN_SHOT -> overlay.getMapScreenShot()
         }
     }
 
@@ -52,14 +55,15 @@ internal class AMapViewManager : ViewGroupManager<AMapView>() {
     }
 
     override fun getExportedCustomDirectEventTypeConstants(): Map<String, Any> {
+
         return MapBuilder.of(
                 "onPress", MapBuilder.of("registrationName", "onPress"),
                 "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
-                "onAnimateCancel", MapBuilder.of("registrationName", "onAnimateCancel"),
                 "onAnimateFinish", MapBuilder.of("registrationName", "onAnimateFinish"),
                 "onStatusChange", MapBuilder.of("registrationName", "onStatusChange"),
                 "onStatusChangeComplete", MapBuilder.of("registrationName", "onStatusChangeComplete"),
-                "onLocation", MapBuilder.of("registrationName", "onLocation")
+                "onLocation", MapBuilder.of("registrationName", "onLocation"),
+                "onMapScreenShot", MapBuilder.of("registrationName", "onMapScreenShot")
         )
     }
 
@@ -194,19 +198,5 @@ internal class AMapViewManager : ViewGroupManager<AMapView>() {
     @ReactProp(name = "locationStyle")
     fun setLocationStyle(view: AMapView, style: ReadableMap) {
         view.setLocationStyle(style)
-    }
-
-    @ReactProp(name = "locationType")
-    fun setLocationStyle(view: AMapView, type: String) {
-        when (type) {
-            "show" -> view.setLocationType(MyLocationStyle.LOCATION_TYPE_SHOW)
-            "locate" -> view.setLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE)
-            "follow" -> view.setLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW)
-            "map_rotate" -> view.setLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE)
-            "location_rotate" -> view.setLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE)
-            "location_rotate_no_center" -> view.setLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER)
-            "follow_no_center" -> view.setLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER)
-            "map_rotate_no_center" -> view.setLocationType(MyLocationStyle.LOCATION_TYPE_MAP_ROTATE_NO_CENTER)
-        }
     }
 }

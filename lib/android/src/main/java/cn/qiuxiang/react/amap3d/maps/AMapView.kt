@@ -1,6 +1,9 @@
 package cn.qiuxiang.react.amap3d.maps
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.os.Environment
+import android.util.Log
 import android.view.View
 import cn.qiuxiang.react.amap3d.toLatLng
 import cn.qiuxiang.react.amap3d.toLatLngBounds
@@ -8,16 +11,16 @@ import cn.qiuxiang.react.amap3d.toWritableMap
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.TextureMapView
-import com.amap.api.maps.model.BitmapDescriptorFactory
-import com.amap.api.maps.model.CameraPosition
-import com.amap.api.maps.model.Marker
-import com.amap.api.maps.model.MyLocationStyle
+import com.amap.api.maps.model.*
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AMapView(context: Context) : TextureMapView(context) {
     private val eventEmitter: RCTEventEmitter = (context as ThemedReactContext).getJSModule(RCTEventEmitter::class.java)
@@ -158,6 +161,76 @@ class AMapView(context: Context) : TextureMapView(context) {
         override fun onFinish() {
             emit(id, "onAnimateFinish")
         }
+    }
+
+    private val mapScreenShotListener = object : AMap.OnMapScreenShotListener {
+        override fun onMapScreenShot(bitmap: Bitmap?, p1: Int) {
+            Log.d("ReactNativeJS", "onMapScreenShot1")
+            val sdf = SimpleDateFormat("yyyyMMddHHmmss")
+            val path = Environment.getExternalStorageDirectory().absolutePath + "/tem_" + sdf.format(Date()) + ".png"
+            val fos = FileOutputStream(path)
+            try {
+                val b = bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fos)!!
+                try {
+                    fos.flush()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                try {
+                    fos.close()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                if (b) {
+                    val data = Arguments.createMap()
+                    data.putString("ScreenShotPath", path)
+                    emit(id, "onMapScreenShot", data)
+                    Log.d("ReactNativeJS", "onMapScreenShot end")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        override fun onMapScreenShot(bitmap: Bitmap?) {
+            Log.d("ReactNativeJS", "onMapScreenShot2")
+
+        }
+    }
+
+    fun getMapScreenShot() {
+        Log.d("ReactNativeJS", "getMapScreenShot")
+        map.getMapScreenShot(mapScreenShotListener)
+    }
+
+    fun setFitView(args: ReadableArray?) {
+        val target = args?.getMap(0)!!
+        val duration = args.getInt(1)
+        val builder = LatLngBounds.builder()
+
+        if (target.hasKey("LatLng1")) {
+            val coordinate = target.getMap("LatLng1").toLatLng()
+            builder.include(coordinate)
+        }
+        if (target.hasKey("LatLng2")) {
+            val coordinate = target.getMap("LatLng2").toLatLng()
+            builder.include(coordinate)
+        }
+        if (target.hasKey("LatLng3")) {
+            val coordinate = target.getMap("LatLng3").toLatLng()
+            builder.include(coordinate)
+        }
+        if (target.hasKey("LatLng4")) {
+            val coordinate = target.getMap("LatLng4").toLatLng()
+            builder.include(coordinate)
+        }
+        if (target.hasKey("LatLng5")) {
+            val coordinate = target.getMap("LatLng5").toLatLng()
+            builder.include(coordinate)
+        }
+
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100), duration.toLong(), animateCallback)
+
     }
 
     fun animateTo(args: ReadableArray?) {
