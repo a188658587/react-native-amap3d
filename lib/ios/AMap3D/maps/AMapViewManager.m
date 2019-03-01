@@ -98,7 +98,7 @@ RCT_EXPORT_METHOD(getMapScreenShot:(nonnull NSNumber *)reactTag  ) {
         
         [mapView takeSnapshotInRect:mapView.annotationVisibleRect withCompletionBlock:^(UIImage *resultImage, NSInteger state){
             mapView.onMapScreenShot(@{
-                                      @"ScreenShotPath":[self savescanresultimage:resultImage
+                                      @"screenShotPath":[self savescanresultimage:resultImage
                                                                         imagename:[NSHomeDirectory() stringByAppendingFormat:@"/tmp/%@.png", [formater stringFromDate: [NSDate date]]]],
                                       });
         } ];
