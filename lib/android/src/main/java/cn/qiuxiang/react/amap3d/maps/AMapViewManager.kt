@@ -56,15 +56,15 @@ internal class AMapViewManager : ViewGroupManager<AMapView>() {
 
     override fun getExportedCustomDirectEventTypeConstants(): Map<String, Any> {
 
-        return MapBuilder.of(
-                "onPress", MapBuilder.of("registrationName", "onPress"),
-                "onLongPress", MapBuilder.of("registrationName", "onLongPress"),
-                "onAnimateFinish", MapBuilder.of("registrationName", "onAnimateFinish"),
-                "onStatusChange", MapBuilder.of("registrationName", "onStatusChange"),
-                "onStatusChangeComplete", MapBuilder.of("registrationName", "onStatusChangeComplete"),
-                "onLocation", MapBuilder.of("registrationName", "onLocation"),
-                "onMapScreenShot", MapBuilder.of("registrationName", "onMapScreenShot")
-        )
+        return mapOf("onPress" to MapBuilder.of("registrationName", "onPress"),
+                        "onLongPress" to MapBuilder.of("registrationName", "onLongPress"),
+                        "onAnimateCancel" to MapBuilder.of("registrationName", "onAnimateCancel"),
+                        "onAnimateFinish" to MapBuilder.of("registrationName", "onAnimateFinish"),
+                        "onStatusChange" to MapBuilder.of("registrationName", "onStatusChange"),
+                        "onStatusChangeComplete" to MapBuilder.of("registrationName", "onStatusChangeComplete"),
+                        "onLocation" to MapBuilder.of("registrationName", "onLocation"),
+                        "onMapScreenShot" to MapBuilder.of("registrationName", "onMapScreenShot")
+                )
     }
 
     @ReactProp(name = "locationEnabled")
