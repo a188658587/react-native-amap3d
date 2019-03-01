@@ -84,7 +84,7 @@ float myX =fabsf([params[@"LatLng1"][@"latitude"] floatValue]-[params[@"LatLng2"
 float myY =fabsf([params[@"LatLng1"][@"longitude"] floatValue]-[params[@"LatLng2"][@"longitude"] floatValue]);
 
 MAMapRect mapRect = MAMapRectForCoordinateRegion(MACoordinateRegionMake(CLLocationCoordinate2DMake(myLatitude, myLongitude), MACoordinateSpanMake(myX, myY)));
-    [mapView setVisibleMapRect: mapRect animated:YES ];
+    [mapView setVisibleMapRect: mapRect edgePadding:UIEdgeInsetsMake(120,30,120,30)  animated:YES ];
 }
 }];
 }
