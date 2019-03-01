@@ -49,6 +49,7 @@ RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLocation, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onStatusChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onStatusChangeComplete, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onMapScreenShot, RCTBubblingEventBlock)
 
 RCT_EXPORT_METHOD(animateTo:(nonnull NSNumber *)reactTag params:(NSDictionary *)params duration:(NSInteger)duration) {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -72,6 +73,49 @@ RCT_EXPORT_METHOD(animateTo:(nonnull NSNumber *)reactTag params:(NSDictionary *)
         [mapView setMapStatus:mapStatus animated:YES duration:duration / 1000.0];
     }];
 }
+
+RCT_EXPORT_METHOD(setFitView:(nonnull NSNumber *)reactTag params:(NSDictionary *)params) {
+[self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+AMapView *mapView = (AMapView *) viewRegistry[reactTag];
+if (params[@"LatLng1"] && params[@"LatLng1"]) {
+float myLatitude = ([params[@"LatLng1"][@"latitude"] floatValue]+[params[@"LatLng2"][@"latitude"] floatValue])/2;
+float myLongitude = ([params[@"LatLng1"][@"longitude"] floatValue]+[params[@"LatLng2"][@"longitude"] floatValue])/2;
+float myX =fabsf([params[@"LatLng1"][@"latitude"] floatValue]-[params[@"LatLng2"][@"latitude"] floatValue]);
+float myY =fabsf([params[@"LatLng1"][@"longitude"] floatValue]-[params[@"LatLng2"][@"longitude"] floatValue]);
+
+MAMapRect mapRect = MAMapRectForCoordinateRegion(MACoordinateRegionMake(CLLocationCoordinate2DMake(myLatitude, myLongitude), MACoordinateSpanMake(myX, myY)));
+    [mapView setVisibleMapRect: mapRect animated:YES ];
+}
+}];
+}
+
+RCT_EXPORT_METHOD(getMapScreenShot:(nonnull NSNumber *)reactTag  ) {
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        AMapView *mapView = (AMapView *) viewRegistry[reactTag];
+        
+        NSDateFormatter *formater = [[NSDateFormatter alloc] init];//用时间给文件全名，以免重复，在测试的时候其实可以判断文件是否存在若存在，则删除，重新生成文件即可
+        [formater setDateFormat:@"YYYY-MM-dd-HH-mm-ss"];
+        
+        [mapView takeSnapshotInRect:mapView.annotationVisibleRect withCompletionBlock:^(UIImage *resultImage, NSInteger state){
+            mapView.onMapScreenShot(@{
+                                      @"ScreenShotPath":[self savescanresultimage:resultImage
+                                                                        imagename:[NSHomeDirectory() stringByAppendingFormat:@"/tmp/%@.png", [formater stringFromDate: [NSDate date]]]],
+                                      });
+        } ];
+    }];
+}
+
+
+-(NSString *)savescanresultimage:(UIImage *)resultimage imagename:(NSString *)strimagename
+{
+    NSData *imageData = UIImagePNGRepresentation(resultimage);
+    //  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    //  NSString *documentsDirectory = [paths objectAtIndex:0];
+    //  NSString *filePath = [documentsDirectory stringByAppendingPathComponent:strimagename]; //Add the file name
+    [imageData writeToFile:strimagename atomically:YES];
+    return strimagename;
+}
+
 
 - (void)mapView:(AMapView *)mapView didSingleTappedAtCoordinate:(CLLocationCoordinate2D)coordinate {
     if (mapView.onPress) {
@@ -176,6 +220,7 @@ RCT_EXPORT_METHOD(animateTo:(nonnull NSNumber *)reactTag params:(NSDictionary *)
                 @"longitude": @(status.centerCoordinate.longitude),
                 @"latitudeDelta": @(mapView.region.span.latitudeDelta),
                 @"longitudeDelta": @(mapView.region.span.longitudeDelta),
+                @"scalePerPixel": @(mapView.metersPerPointForCurrentZoom)
         });
     }
 }
