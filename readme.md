@@ -36,7 +36,7 @@ react-native 高德地图组件，使用最新 3D SDK，支持 Android + iOS，�
 npm i react-native-amap3d
 ```
 
-### 项目配置
+### 项目配置111111
 #### Android
 ```
 react-native link react-native-amap3d
