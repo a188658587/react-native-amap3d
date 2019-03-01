@@ -74,7 +74,7 @@ RCT_EXPORT_METHOD(animateTo:(nonnull NSNumber *)reactTag params:(NSDictionary *)
     }];
 }
 
-RCT_EXPORT_METHOD(setFitView:(nonnull NSNumber *)reactTag params:(NSDictionary *)params) {
+RCT_EXPORT_METHOD(setFitView:(nonnull NSNumber *)reactTag params:(NSDictionary *)params duration:(NSInteger)duration) {
 [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
 AMapView *mapView = (AMapView *) viewRegistry[reactTag];
 if (params[@"LatLng1"] && params[@"LatLng1"]) {
