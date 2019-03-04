@@ -29,6 +29,8 @@ class AMapView(context: Context) : TextureMapView(context) {
     private val locationStyle by lazy {
         val locationStyle = MyLocationStyle()
         locationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER)
+        locationStyle.strokeColor(Color.argb(0, 0, 0, 0))
+        locationStyle.radiusFillColor(Color.argb(0, 0, 0, 0))
         locationStyle
     }
 
@@ -185,7 +187,7 @@ class AMapView(context: Context) : TextureMapView(context) {
                 }
                 if (b) {
                     val data = Arguments.createMap()
-                    data.putString("ScreenShotPath", path)
+                    data.putString("screenShotPath", path)
                     emit(id, "onMapScreenShot", data)
                     Log.d("ReactNativeJS", "onMapScreenShot end")
                 }
