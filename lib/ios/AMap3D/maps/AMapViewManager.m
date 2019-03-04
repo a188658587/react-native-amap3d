@@ -18,6 +18,8 @@ RCT_EXPORT_MODULE()
     mapView.centerCoordinate = CLLocationCoordinate2DMake(39.9242, 116.3979);
     mapView.zoomLevel = 10;
     mapView.delegate = self;
+    // 不显示精度圈
+    mapView.customizeUserLocationAccuracyCircleRepresentation=YES;
     return mapView;
 }
 
