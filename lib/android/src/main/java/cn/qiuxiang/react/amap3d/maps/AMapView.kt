@@ -2,6 +2,7 @@ package cn.qiuxiang.react.amap3d.maps
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Environment
 import android.util.Log
 import android.view.View
