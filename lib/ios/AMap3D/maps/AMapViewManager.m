@@ -18,6 +18,8 @@ RCT_EXPORT_MODULE()
     mapView.centerCoordinate = CLLocationCoordinate2DMake(39.9242, 116.3979);
     mapView.zoomLevel = 10;
     mapView.delegate = self;
+    // 不显示精度圈
+    mapView.customizeUserLocationAccuracyCircleRepresentation=YES;
     return mapView;
 }
 
@@ -84,7 +86,7 @@ float myX =fabsf([params[@"LatLng1"][@"latitude"] floatValue]-[params[@"LatLng2"
 float myY =fabsf([params[@"LatLng1"][@"longitude"] floatValue]-[params[@"LatLng2"][@"longitude"] floatValue]);
 
 MAMapRect mapRect = MAMapRectForCoordinateRegion(MACoordinateRegionMake(CLLocationCoordinate2DMake(myLatitude, myLongitude), MACoordinateSpanMake(myX, myY)));
-    [mapView setVisibleMapRect: mapRect edgePadding:UIEdgeInsetsMake(120,30,120,30)  animated:YES ];
+    [mapView setVisibleMapRect: mapRect   animated:YES ];
 }
 }];
 }
