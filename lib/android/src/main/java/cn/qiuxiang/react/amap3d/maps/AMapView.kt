@@ -36,8 +36,6 @@ class AMapView(context: Context) : TextureMapView(context) {
         locationStyle
     }
 
-    private var lastLocationEnabled
-
     init {
         super.onCreate(null)
 
