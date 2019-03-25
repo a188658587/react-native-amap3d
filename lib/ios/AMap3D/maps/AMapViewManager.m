@@ -94,7 +94,8 @@ MAMapRect mapRect = MAMapRectForCoordinateRegion(MACoordinateRegionMake(CLLocati
 RCT_EXPORT_METHOD(getMapScreenShot:(nonnull NSNumber *)reactTag  ) {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         AMapView *mapView = (AMapView *) viewRegistry[reactTag];
-        
+                // 截图前把自己的位置隐藏
+        mapView.showsUserLocation = false;
         NSDateFormatter *formater = [[NSDateFormatter alloc] init];//用时间给文件全名，以免重复，在测试的时候其实可以判断文件是否存在若存在，则删除，重新生成文件即可
         [formater setDateFormat:@"YYYY-MM-dd-HH-mm-ss"];
         
@@ -103,6 +104,8 @@ RCT_EXPORT_METHOD(getMapScreenShot:(nonnull NSNumber *)reactTag  ) {
                                       @"screenShotPath":[self savescanresultimage:resultImage
                                                                         imagename:[NSHomeDirectory() stringByAppendingFormat:@"/tmp/%@.png", [formater stringFromDate: [NSDate date]]]],
                                       });
+                        // 截图后把自己的位置显示出来
+            mapView.showsUserLocation = true;
         } ];
     }];
 }
