@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Environment
+import java.io.File
 import android.util.Log
 import android.view.View
 import cn.qiuxiang.react.amap3d.toLatLng
@@ -34,6 +35,8 @@ class AMapView(context: Context) : TextureMapView(context) {
         locationStyle.radiusFillColor(Color.argb(0, 0, 0, 0))
         locationStyle
     }
+
+    private var lastLocationEnabled
 
     init {
         super.onCreate(null)
@@ -172,7 +175,8 @@ class AMapView(context: Context) : TextureMapView(context) {
         override fun onMapScreenShot(bitmap: Bitmap?, p1: Int) {
             Log.d("ReactNativeJS", "onMapScreenShot1")
             val sdf = SimpleDateFormat("yyyyMMddHHmmss")
-            val path = Environment.getExternalStorageDirectory().absolutePath + "/tem_" + sdf.format(Date()) + ".png"
+            val path = File(context.getExternalCacheDir(), "/tem_" + sdf.format(Date()) + ".png").absolutePath;
+//            val path = Environment.getExternalStorageDirectory().absolutePath + "/tem_" + sdf.format(Date()) + ".png"
             val fos = FileOutputStream(path)
             try {
                 val b = bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fos)!!
@@ -191,6 +195,7 @@ class AMapView(context: Context) : TextureMapView(context) {
                     data.putString("screenShotPath", path)
                     emit(id, "onMapScreenShot", data)
                     Log.d("ReactNativeJS", "onMapScreenShot end")
+                    setLocationEnabled(true)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -205,6 +210,8 @@ class AMapView(context: Context) : TextureMapView(context) {
 
     fun getMapScreenShot() {
         Log.d("ReactNativeJS", "getMapScreenShot")
+        lastLocationEnabled = map.isMyLocationEnabled
+        setLocationEnabled(false)
         map.getMapScreenShot(mapScreenShotListener)
     }
 
