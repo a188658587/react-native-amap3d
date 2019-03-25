@@ -208,7 +208,6 @@ class AMapView(context: Context) : TextureMapView(context) {
 
     fun getMapScreenShot() {
         Log.d("ReactNativeJS", "getMapScreenShot")
-        lastLocationEnabled = map.isMyLocationEnabled
         setLocationEnabled(false)
         map.getMapScreenShot(mapScreenShotListener)
     }
