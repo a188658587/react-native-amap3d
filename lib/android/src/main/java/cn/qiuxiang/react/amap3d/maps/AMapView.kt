@@ -58,7 +58,7 @@ class AMapView(context: Context) : TextureMapView(context) {
             event.putDouble("accuracy", location.accuracy.toDouble())
             event.putDouble("altitude", location.altitude)
             event.putDouble("speed", location.speed.toDouble())
-            event.putInt("timestamp", location.time.toInt())
+            event.putDouble("timestamp", location.time.toDouble())
             emit(id, "onLocation", event)
         }
 
@@ -253,7 +253,7 @@ class AMapView(context: Context) : TextureMapView(context) {
         var rotation = currentCameraPosition.bearing
 
         if (target.hasKey("coordinate")) {
-            coordinate = target.getMap("coordinate").toLatLng()
+            coordinate = target.getMap("coordinate")!!.toLatLng()
         }
 
         if (target.hasKey("zoomLevel")) {
